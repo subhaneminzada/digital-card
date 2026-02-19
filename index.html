@@ -65,6 +65,14 @@
             transition: transform 0.1s ease-out, box-shadow 0.3s ease;
             transform-style: preserve-3d;
             position: relative;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+        }
+
+        /* 3D Layering for depth */
+        .glass>* {
+            transform: translateZ(20px);
+            -webkit-transform: translateZ(20px);
         }
 
         .perspective-container {
@@ -172,7 +180,7 @@
 <body class="flex items-center justify-center min-h-screen p-4 text-zinc-900 dark:text-zinc-300">
 
     <div class="perspective-container">
-        <div id="parallax-card" class="w-full max-w-md overflow-hidden shadow-2xl glass rounded-3xl">
+        <div id="parallax-card" class="w-full max-w-md shadow-2xl glass rounded-3xl">
             <div class="shine"></div>
             <!-- Banner Image Area (Subtle Asymmetric Padding) -->
             <div class="px-4 pt-4 pb-2">
@@ -255,6 +263,7 @@
                     const rotateY = x * maxTilt;
 
                     card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
+                    card.style.webkitTransform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
 
                     // Move shine in opposite direction
                     const shineX = (x + 1) * 50; // 0% to 100%
@@ -296,8 +305,11 @@
                 };
 
                 // iOS Permission Flow
+                const needsPermission = typeof DeviceOrientationEvent !== 'undefined' &&
+                    typeof DeviceOrientationEvent.requestPermission === 'function';
+
                 if (isMobile) {
-                    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    if (needsPermission) {
                         motionOverlay.style.display = 'flex';
                         enableBtn.addEventListener('click', async () => {
                             try {
@@ -305,16 +317,23 @@
                                 if (permission === 'granted') {
                                     initGyro();
                                     motionOverlay.style.display = 'none';
+                                } else {
+                                    alert('Permission denied. Please enable motion sensors in settings.');
+                                    motionOverlay.style.display = 'none';
                                 }
                             } catch (err) {
-                                console.error('Error requesting motion permission:', err);
+                                console.error('Error:', err);
                                 motionOverlay.style.display = 'none';
+                                initGyro(); // Try anyway
                             }
                         });
                     } else {
-                        // Non-iOS or older browser
+                        // Android or older iOS
                         initGyro();
                     }
+                } else if ('ontouchstart' in window) {
+                    // Touch device but not categorized as mobile (e.g. iPad in desktop mode)
+                    initGyro();
                 }
 
                 document.getElementById('saveContact').addEventListener('click', function () {
@@ -337,19 +356,20 @@
                     window.URL.revokeObjectURL(url);
                 });
             </script>
-</body>
-</div>
 
-<!-- Motion Permission Overlay -->
-<div id="motion-permission">
-    <div class="p-8 glass rounded-3xl max-w-xs border border-white/10">
-        <h2 class="text-2xl font-bold mb-4 text-white">Enable 3D Experience</h2>
-        <p class="text-zinc-400 mb-6">This card uses your phone's sensors to create a spatial 3D effect.</p>
-        <button id="enable-motion"
-            class="w-full py-4 px-6 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl transition-all active:scale-95">
-            Enable 3D Effect
-        </button>
+            <!-- Motion Permission Overlay -->
+            <div id="motion-permission">
+                <div class="p-8 glass rounded-3xl max-w-xs border border-white/10">
+                    <h2 class="text-2xl font-bold mb-4 text-white">Enable 3D Experience</h2>
+                    <p class="text-zinc-400 mb-6">This card uses your phone's sensors to create a spatial 3D effect.</p>
+                    <button id="enable-motion"
+                        class="w-full py-4 px-6 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl transition-all active:scale-95">
+                        Enable 3D Effect
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+</body>
 
 </html>
