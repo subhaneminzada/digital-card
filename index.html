@@ -6,16 +6,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Digital Business Card</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <script>
+        // Sync system theme with 'dark' class
+        if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            if (e.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        html {
-  background-color: #1e293b; /* This fills the 'dead space' on iPhones */
-        }
-        
         body {
             font-family: 'Inter', sans-serif;
+            transition: background 0.5s ease;
+        }
+
+        /* Light mode background */
+        body:not(.dark) {
+            background: linear-gradient(-45deg, #f8fafc, #f1f5f9, #e2e8f0, #f8fafc);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        /* Dark mode background */
+        .dark body,
+        body.dark {
             background: linear-gradient(-45deg, #09090b, #111827, #1e1b4b, #09090b);
             background-size: 400% 400%;
             animation: gradientBG 15s ease infinite;
@@ -36,12 +66,32 @@
         }
 
         .glass {
+            transition: all 0.3s ease;
+        }
+
+        /* Light mode glass */
+        body:not(.dark) .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        /* Dark mode glass */
+        .dark .glass {
             background: rgba(24, 24, 27, 0.7);
             backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .gradient-text {
+            background: linear-gradient(135deg, #18181b 0%, #3f3f46 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            transition: all 0.3s ease;
+        }
+
+        .dark .gradient-text {
             background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
             -webkit-background-clip: text;
             background-clip: text;
@@ -77,30 +127,30 @@
     </style>
 </head>
 
-<body class="flex items-center justify-center min-h-screen p-4 text-zinc-300">
+<body class="flex items-center justify-center min-h-screen p-4 text-zinc-900 dark:text-zinc-300">
 
     <div class="w-full max-w-md overflow-hidden shadow-2xl glass rounded-3xl">
         <!-- Banner Image Area (1:1 Ratio for 512x512) -->
-        <div class="relative w-full aspect-square overflow-hidden group">
+        <div class="relative w-full overflow-hidden aspect-square group rounded-b-3xl">
             <div class="absolute inset-0 bg-blue-500/5 animate-pulse"></div>
             <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=512&h=512&auto=format&fit=crop"
                 alt="Profile Banner"
                 class="relative object-cover w-full h-full transition-transform duration-700 group-hover:scale-110">
-            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/80 to-transparent"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent dark:from-zinc-950/80"></div>
         </div>
 
         <div class="flex flex-col items-center p-8 pt-6">
             <!-- Info -->
             <h1 class="text-3xl font-bold gradient-text">John Doe</h1>
-            <p class="mt-1 text-lg font-medium text-blue-400">Senior Product Designer</p>
+            <p class="mt-1 text-lg font-medium text-blue-600 dark:text-blue-400">Senior Product Designer</p>
 
-            <div class="w-full h-px my-6 bg-zinc-800/50"></div>
+            <div class="w-full h-px my-6 bg-zinc-200 dark:bg-zinc-800/50"></div>
 
             <!-- Contact Buttons -->
             <div class="grid w-full grid-cols-1 gap-4">
                 <!-- Primary Action: Save to Contacts (Delayed Glow) -->
                 <button id="saveContact"
-                    class="relative flex items-center justify-center w-full px-6 py-4 font-semibold text-black transition-all duration-300 bg-blue-500 rounded-2xl hover:bg-blue-400 hover:scale-[1.02] active:scale-95 group">
+                    class="relative flex items-center justify-center w-full px-6 py-4 font-semibold text-white dark:text-black transition-all duration-300 bg-blue-600 dark:bg-blue-500 rounded-2xl hover:bg-blue-700 dark:hover:bg-blue-400 hover:scale-[1.02] active:scale-95 group">
                     <svg class="w-5 h-5 mr-3 z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
                     </svg>
@@ -109,9 +159,9 @@
 
                 <!-- Secondary Action: Email -->
                 <a href="mailto:john.doe@example.com"
-                    class="flex items-center justify-center w-full px-6 py-4 transition-all duration-300 rounded-2xl bg-zinc-800 hover:bg-zinc-700 hover:scale-[1.02] active:scale-95 group">
-                    <svg class="w-5 h-5 mr-3 transition-colors text-zinc-400 group-hover:text-blue-400" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24">
+                    class="flex items-center justify-center w-full px-6 py-4 transition-all duration-300 rounded-2xl bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 hover:scale-[1.02] active:scale-95 group">
+                    <svg class="w-5 h-5 mr-3 transition-colors text-zinc-500 dark:text-zinc-400 group-hover:text-blue-600 dark:group-hover:text-blue-400"
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
