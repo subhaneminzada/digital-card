@@ -130,16 +130,18 @@
 <body class="flex items-center justify-center min-h-screen p-4 text-zinc-900 dark:text-zinc-300">
 
     <div class="w-full max-w-md overflow-hidden shadow-2xl glass rounded-3xl">
-        <!-- Banner Image Area (1:1 Ratio for 512x512) -->
-        <div class="relative w-full overflow-hidden aspect-square group rounded-b-3xl">
-            <div class="absolute inset-0 bg-blue-500/5 animate-pulse"></div>
-            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=512&h=512&auto=format&fit=crop"
-                alt="Profile Banner"
-                class="relative object-cover w-full h-full transition-transform duration-700 group-hover:scale-110">
-            <div class="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent dark:from-zinc-950/80"></div>
+        <!-- Banner Image Area (1:1 Ratio with Padding) -->
+        <div class="p-6">
+            <div class="relative w-full overflow-hidden aspect-square group rounded-2xl">
+                <div class="absolute inset-0 bg-blue-500/5 animate-pulse"></div>
+                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=512&h=512&auto=format&fit=crop"
+                    alt="Profile Banner"
+                    class="relative object-cover w-full h-full transition-transform duration-700 group-hover:scale-110">
+                <div class="absolute inset-0 bg-gradient-to-t from-white/20 to-transparent dark:from-zinc-950/80"></div>
+            </div>
         </div>
 
-        <div class="flex flex-col items-center p-8 pt-6">
+        <div class="flex flex-col items-center p-8 pt-0">
             <!-- Info -->
             <h1 class="text-3xl font-bold gradient-text">John Doe</h1>
             <p class="mt-1 text-lg font-medium text-blue-600 dark:text-blue-400">Senior Product Designer</p>
