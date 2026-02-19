@@ -8,7 +8,7 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:title" content="Subhan Eminzada | Health Insurance Broker">
     <meta property="og:description" content="Scan to save my contact information.">
-    <meta property="og:image" content="https://subhaneminzada.github.io/digital-card/Final_Logo.PNG">
+    <meta property="og:image" content="https://raw.githubusercontent.com/subhaneminzada/digital-card/main/logo.jpg">
     <meta property="og:type" content="website">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -136,7 +136,7 @@
         <div class="px-4 pt-4 pb-2">
             <div class="relative w-full overflow-hidden aspect-square group rounded-2xl">
                 <div class="absolute inset-0 bg-blue-500/5 animate-pulse"></div>
-                <img src="https://subhaneminzada.github.io/digital-card/Final_Logo.PNG" alt="John Doe Logo"
+                <img src="logo.jpg" alt="Health Insurance Logo"
                     class="relative object-cover w-full h-full transition-transform duration-700 group-hover:scale-110">
                 <div class="absolute inset-0 bg-gradient-to-t from-white/15 to-transparent dark:from-zinc-950/65"></div>
             </div>
@@ -152,7 +152,7 @@
             <!-- Contact Buttons -->
             <div class="grid w-full grid-cols-1 gap-4">
                 <!-- Phone Button -->
-                <a href="tel:+1234567890" aria-label="Call John Doe"
+                <a href="tel:+17864401399" aria-label="Call Subhan Eminzada"
                     class="flex items-center justify-center w-full px-6 py-4 transition-all duration-300 rounded-2xl bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 active:scale-95 group select-none touch-manipulation glow-blue">
                     <svg class="w-5 h-5 mr-3 transition-colors text-zinc-500 dark:text-zinc-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 pointer-events-none"
                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -163,7 +163,7 @@
                 </a>
 
                 <!-- Email Button -->
-                <a href="mailto:john.doe@example.com" aria-label="Send email to John Doe"
+                <a href="mailto:subhaneminzada@gmail.com" aria-label="Send email to Subhan Eminzada"
                     class="flex items-center justify-center w-full px-6 py-4 transition-all duration-300 rounded-2xl bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 group select-none touch-manipulation glow-blue">
                     <svg class="w-5 h-5 mr-3 transition-colors text-zinc-500 dark:text-zinc-400 group-hover:text-blue-600 dark:group-hover:text-blue-400 pointer-events-none"
                         fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -174,7 +174,7 @@
                 </a>
 
                 <!-- WhatsApp Button -->
-                <a href="https://wa.me/1234567890" target="_blank" aria-label="Open WhatsApp chat with John Doe"
+                <a href="https://wa.me/17864401399" target="_blank" aria-label="Open WhatsApp chat with Subhan Eminzada"
                     class="flex items-center justify-center w-full px-6 py-4 transition-all duration-300 rounded-2xl bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-300 hover:bg-zinc-200 dark:hover:bg-zinc-700 group select-none touch-manipulation glow-green">
                     <svg class="w-5 h-5 mr-3 transition-colors text-zinc-500 dark:text-zinc-400 group-hover:text-green-600 dark:group-hover:text-green-500 pointer-events-none"
                         fill="currentColor" viewBox="0 0 24 24">
@@ -185,7 +185,7 @@
                 </a>
 
                 <!-- Primary Action: Save to Contacts -->
-                <button id="saveContact" aria-label="Save John Doe to contacts"
+                <button id="saveContact" aria-label="Save Subhan Eminzada to contacts"
                     class="relative flex items-center justify-center w-full px-6 py-4 font-semibold text-white dark:text-black transition-all duration-300 rounded-2xl bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-400 group select-none touch-manipulation glow-blue">
                     <svg class="w-5 h-5 mr-3 z-10 pointer-events-none" fill="none" stroke="currentColor"
                         viewBox="0 0 24 24">
@@ -201,10 +201,10 @@
         document.getElementById('saveContact').addEventListener('click', function () {
             const vcard = 'BEGIN:VCARD\n' +
                 'VERSION:3.0\n' +
-                'FN:John Doe\n' +
-                'TITLE:Senior Product Designer\n' +
-                'EMAIL;TYPE=INTERNET:john.doe@example.com\n' +
-                'URL:https://linkedin.com\n' +
+                'FN:Subhan Eminzada\n' +
+                'TITLE:Health Insurance Broker\n' +
+                'EMAIL;TYPE=INTERNET:subhaneminzada@gmail.com\n' +
+                'TEL;TYPE=CELL:+17864401399\n' +
                 'END:VCARD';
 
             const blob = new Blob([vcard], { type: 'text/vcard' });
@@ -212,7 +212,7 @@
             const a = document.createElement('a');
             a.style.display = 'none';
             a.href = url;
-            a.download = 'John_Doe.vcf';
+            a.download = 'Subhan_Eminzada.vcf';
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);
