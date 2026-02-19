@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Business Card</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(-45deg, #09090b, #111827, #1e1b4b, #09090b);
+            background-size: 400% 400%;
+            animation: gradientBG 15s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .glass {
+            background: rgba(24, 24, 27, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .gradient-text {
+            background: linear-gradient(135deg, #fff 0%, #a1a1aa 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Glow Effect Class */
+        .glow-active {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+
+        .glow-active::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 1rem;
+            /* 2xl */
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: .5;
+            }
+        }
+    </style>
+</head>
+
+<body class="flex items-center justify-center min-h-screen p-4 text-zinc-300">
+
+    <div class="w-full max-w-md overflow-hidden shadow-2xl glass rounded-3xl">
+        <!-- Banner Image Area (1:1 Ratio for 512x512) -->
+        <div class="relative w-full aspect-square overflow-hidden group">
+            <div class="absolute inset-0 bg-blue-500/5 animate-pulse"></div>
+            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=512&h=512&auto=format&fit=crop"
+                alt="Profile Banner"
+                class="relative object-cover w-full h-full transition-transform duration-700 group-hover:scale-110">
+            <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/80 to-transparent"></div>
+        </div>
+
+        <div class="flex flex-col items-center p-8 pt-6">
+            <!-- Info -->
+            <h1 class="text-3xl font-bold gradient-text">John Doe</h1>
+            <p class="mt-1 text-lg font-medium text-blue-400">Senior Product Designer</p>
+
+            <div class="w-full h-px my-6 bg-zinc-800/50"></div>
+
+            <!-- Contact Buttons -->
+            <div class="grid w-full grid-cols-1 gap-4">
+                <!-- Primary Action: Save to Contacts (Delayed Glow) -->
+                <button id="saveContact"
+                    class="relative flex items-center justify-center w-full px-6 py-4 font-semibold text-black transition-all duration-300 bg-blue-500 rounded-2xl hover:bg-blue-400 hover:scale-[1.02] active:scale-95 group">
+                    <svg class="w-5 h-5 mr-3 z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    <span class="relative z-10">Save to Contacts</span>
+                </button>
+
+                <!-- Secondary Action: Email -->
+                <a href="mailto:john.doe@example.com"
+                    class="flex items-center justify-center w-full px-6 py-4 transition-all duration-300 rounded-2xl bg-zinc-800 hover:bg-zinc-700 hover:scale-[1.02] active:scale-95 group">
+                    <svg class="w-5 h-5 mr-3 transition-colors text-zinc-400 group-hover:text-blue-400" fill="none"
+                        stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                    </svg>
+                    <span>Email Me</span>
+                </a>
+            </div>
+        </div>
+
+        <p class="mt-12 text-xs text-center text-zinc-600">
+            &copy; 2026 John Doe. Built with Tailwind CSS.
+        </p>
+    </div>
+
+    <script>
+        // Delayed Glow Trigger
+        setTimeout(() => {
+            const button = document.getElementById('saveContact');
+            if (button) button.classList.add('glow-active');
+        }, 3000);
+
+        document.getElementById('saveContact').addEventListener('click', function () {
+            const vcard = 'BEGIN:VCARD\n' +
+                'VERSION:3.0\n' +
+                'FN:John Doe\n' +
+                'TITLE:Senior Product Designer\n' +
+                'EMAIL;TYPE=INTERNET:john.doe@example.com\n' +
+                'URL:https://linkedin.com\n' +
+                'END:VCARD';
+
+            const blob = new Blob([vcard], { type: 'text/vcard' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'John_Doe.vcf';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+
+</html>
