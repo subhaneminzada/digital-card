@@ -8,7 +8,8 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:title" content="Subhan Eminzada | Health Insurance Broker">
     <meta property="og:description" content="Scan to save my contact information.">
-    <meta property="og:image" content="https://raw.githubusercontent.com/subhaneminzada/digital-card/refs/heads/main/logo-removebg-preview.png">
+    <meta property="og:image"
+        content="https://raw.githubusercontent.com/subhaneminzada/digital-card/refs/heads/main/logo-removebg-preview.png">
     <meta property="og:type" content="website">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -174,21 +175,41 @@
             transform: scale(0.98);
             transition: all 0.1s ease;
         }
+
+        /* Image Protection */
+        #main-logo,
+        .logo-overlay {
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            pointer-events: none;
+        }
+
+        .logo-保护-container {
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+        }
     </style>
 </head>
 
 <body class="flex items-center justify-center min-h-screen p-4 text-zinc-900 dark:text-zinc-300">
 
     <div class="perspective-container">
-        <div id="parallax-card" class="w-full max-w-md shadow-2xl glass rounded-3xl">
+        <div id="parallax-card" class="w-full max-w-[480px] shadow-2xl glass rounded-3xl">
             <div class="shine"></div>
             <!-- Banner Image Area (Subtle Asymmetric Padding) -->
-            <div class="px-4 pt-4 pb-2">
-                <div class="relative w-full overflow-hidden aspect-square group rounded-2xl">
+            <div class="px-8 pt-8 pb-4">
+                <div
+                    class="relative w-full overflow-hidden aspect-square group rounded-2xl p-6 bg-transparent dark:bg-zinc-800/30 flex items-center justify-center logo-保护-container">
                     <div class="absolute inset-0 bg-blue-500/5 animate-pulse"></div>
-                    <img src="logo.jpg" alt="Health Insurance Logo"
-                        class="relative object-cover w-full h-full transition-transform duration-700 group-hover:scale-110">
-                    <div class="absolute inset-0 bg-gradient-to-t from-white/15 to-transparent dark:from-zinc-950/65">
+                    <img id="main-logo"
+                        src="https://raw.githubusercontent.com/subhaneminzada/digital-card/refs/heads/main/logo-removebg-preview.png"
+                        alt="Health Insurance Logo" oncontextmenu="return false;" onmousedown="return false;"
+                        ondragstart="return false;"
+                        class="relative object-contain w-full h-full transition-transform duration-700 group-hover:scale-110 pointer-events-none">
+                    <!-- Invisible Overlay Deterrent -->
+                    <div class="absolute inset-0 z-20 logo-overlay" oncontextmenu="return false;"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-zinc-950/5 to-transparent dark:from-zinc-950/40">
                     </div>
                 </div>
             </div>
@@ -250,6 +271,7 @@
 
             <script>
                 const card = document.getElementById('parallax-card');
+                const mainLogo = document.getElementById('main-logo');
                 const shine = card.querySelector('.shine');
                 const motionOverlay = document.getElementById('motion-permission');
                 const enableBtn = document.getElementById('enable-motion');
@@ -257,6 +279,7 @@
                 let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
                 let maxTilt = 8; // Degrees
 
+                // Motion & Parallax Logic
                 const updateParallax = (x, y) => {
                     // x and y are normalized values between -1 and 1
                     const rotateX = -y * maxTilt;
