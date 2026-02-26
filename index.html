@@ -18,11 +18,13 @@
         }
     </script>
     <script>
-        // Theme synchronization
+        // Theme synchronization (Temporarily Disabled)
+        /*
         const setDark = (isDark) => document.documentElement.classList.toggle('dark', isDark);
         const matcher = window.matchMedia('(prefers-color-scheme: dark)');
         setDark(matcher.matches);
         matcher.addEventListener('change', e => setDark(e.matches));
+        */
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -63,56 +65,10 @@
         }
 
         .glass {
-            transition: transform 0.1s ease-out, box-shadow 0.3s ease;
-            transform-style: preserve-3d;
+            transition: box-shadow 0.3s ease;
             position: relative;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
         }
 
-        /* 3D Layering for depth */
-        .glass>* {
-            transform: translateZ(20px);
-            -webkit-transform: translateZ(20px);
-        }
-
-        .perspective-container {
-            perspective: 1000px;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Dynamic Shine Effect */
-        .shine {
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 80%);
-            pointer-events: none;
-            z-index: 10;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .glass:hover .shine {
-            opacity: 1;
-        }
-
-        /* Permission Overlay */
-        #motion-permission {
-            position: fixed;
-            inset: 0;
-            z-index: 100;
-            background: rgba(0, 0, 0, 0.8);
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            text-align: center;
-            backdrop-filter: blur(8px);
-        }
 
         /* iOS Interaction Fixes */
         a,
@@ -188,22 +144,22 @@
         .logo-保护-container {
             -webkit-user-select: none;
             -webkit-touch-callout: none;
+            user-select: none;
         }
     </style>
 </head>
 
 <body class="flex items-center justify-center min-h-screen p-4 text-zinc-900 dark:text-zinc-300">
 
-    <div class="perspective-container">
-        <div id="parallax-card" class="w-full max-w-[480px] shadow-2xl glass rounded-3xl">
-            <div class="shine"></div>
+    <div class="flex items-center justify-center w-full">
+        <div id="card" class="w-full max-w-[480px] shadow-2xl glass rounded-3xl">
             <!-- Banner Image Area (Subtle Asymmetric Padding) -->
             <div class="px-8 pt-8 pb-4">
                 <div
                     class="relative w-full overflow-hidden aspect-square group rounded-2xl p-6 bg-transparent dark:bg-zinc-800/30 flex items-center justify-center logo-保护-container">
                     <div class="absolute inset-0 bg-blue-500/5 animate-pulse"></div>
                     <img id="main-logo"
-                        src="https://raw.githubusercontent.com/subhaneminzada/digital-card/refs/heads/main/logo-removebg-preview.png"
+                        src="https://raw.githubusercontent.com/subhaneminzada/digital-card/refs/heads/main/logo.jpg"
                         alt="Health Insurance Logo" oncontextmenu="return false;" onmousedown="return false;"
                         ondragstart="return false;"
                         class="relative object-contain w-full h-full transition-transform duration-700 group-hover:scale-110 pointer-events-none">
@@ -270,95 +226,6 @@
             </div>
 
             <script>
-                const card = document.getElementById('parallax-card');
-                const mainLogo = document.getElementById('main-logo');
-                const shine = card.querySelector('.shine');
-                const motionOverlay = document.getElementById('motion-permission');
-                const enableBtn = document.getElementById('enable-motion');
-
-                let isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-                let maxTilt = 8; // Degrees
-
-                // Motion & Parallax Logic
-                const updateParallax = (x, y) => {
-                    // x and y are normalized values between -1 and 1
-                    const rotateX = -y * maxTilt;
-                    const rotateY = x * maxTilt;
-
-                    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-                    card.style.webkitTransform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-
-                    // Move shine in opposite direction
-                    const shineX = (x + 1) * 50; // 0% to 100%
-                    const shineY = (y + 1) * 50;
-                    shine.style.background = `radial-gradient(circle at ${shineX}% ${shineY}%, rgba(255, 255, 255, 0.2) 0%, transparent 80%)`;
-                };
-
-                // Desktop: Mouse Move
-                if (!isMobile) {
-                    document.addEventListener('mousemove', (e) => {
-                        const { clientX, clientY } = e;
-                        const { innerWidth, innerHeight } = window;
-
-                        const x = (clientX / innerWidth) * 2 - 1;
-                        const y = (clientY / innerHeight) * 2 - 1;
-
-                        updateParallax(x, y);
-                    });
-                }
-
-                // Mobile: Gyroscope
-                const initGyro = () => {
-                    window.addEventListener('deviceorientation', (e) => {
-                        if (!e.beta || !e.gamma) return;
-
-                        // beta: -180 to 180 (tilt forward/back)
-                        // gamma: -90 to 90 (tilt left/right)
-                        // We normalize for a "natural" feel when holding the phone at a slight angle (~45deg)
-                        let x = e.gamma / 30; // Tilt range ~30deg for full effect
-                        let y = (e.beta - 45) / 30;
-
-                        // Clamp values
-                        x = Math.max(-1, Math.min(1, x));
-                        y = Math.max(-1, Math.min(1, y));
-
-                        updateParallax(x, y);
-                    });
-                    card.style.transition = 'transform 0.2s ease-out'; // Slightly more smoothing for gyro
-                };
-
-                // iOS Permission Flow
-                const needsPermission = typeof DeviceOrientationEvent !== 'undefined' &&
-                    typeof DeviceOrientationEvent.requestPermission === 'function';
-
-                if (isMobile) {
-                    if (needsPermission) {
-                        motionOverlay.style.display = 'flex';
-                        enableBtn.addEventListener('click', async () => {
-                            try {
-                                const permission = await DeviceOrientationEvent.requestPermission();
-                                if (permission === 'granted') {
-                                    initGyro();
-                                    motionOverlay.style.display = 'none';
-                                } else {
-                                    alert('Permission denied. Please enable motion sensors in settings.');
-                                    motionOverlay.style.display = 'none';
-                                }
-                            } catch (err) {
-                                console.error('Error:', err);
-                                motionOverlay.style.display = 'none';
-                                initGyro(); // Try anyway
-                            }
-                        });
-                    } else {
-                        // Android or older iOS
-                        initGyro();
-                    }
-                } else if ('ontouchstart' in window) {
-                    // Touch device but not categorized as mobile (e.g. iPad in desktop mode)
-                    initGyro();
-                }
-
                 document.getElementById('saveContact').addEventListener('click', function () {
                     const vcard = 'BEGIN:VCARD\n' +
                         'VERSION:3.0\n' +
@@ -379,18 +246,6 @@
                     window.URL.revokeObjectURL(url);
                 });
             </script>
-
-            <!-- Motion Permission Overlay -->
-            <div id="motion-permission">
-                <div class="p-8 glass rounded-3xl max-w-xs border border-white/10">
-                    <h2 class="text-2xl font-bold mb-4 text-white">Enable 3D Experience</h2>
-                    <p class="text-zinc-400 mb-6">This card uses your phone's sensors to create a spatial 3D effect.</p>
-                    <button id="enable-motion"
-                        class="w-full py-4 px-6 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-2xl transition-all active:scale-95">
-                        Enable 3D Effect
-                    </button>
-                </div>
-            </div>
         </div>
     </div>
 </body>
